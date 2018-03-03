@@ -8,4 +8,8 @@ public class GameSceneManager : SingletonMonoBehaviour<GameSceneManager> {
 	public void LoadGameScene() {
 		SceneManager.LoadScene("game");
 	}
+
+	public void LoadTitleScene() {
+		SceneManager.LoadScene("title");
+	}
 }
