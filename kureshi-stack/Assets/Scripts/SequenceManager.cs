@@ -62,6 +62,18 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	[SerializeField]
 	private const float WAIT_TIME = 3.0f;
 
+	/**
+	 * ハイスコアのキー
+	 * @type {string}
+	 */
+	private const string HIGH_SCORE_KEY = "high_score";
+
+	/**
+	 * 現在のスコア保存
+	 * @type {int}
+	 */
+	 private int score = 0;
+
 	[SerializeField]
 	private List<GameObject> _kureshiList;
 
@@ -120,10 +132,16 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 
 	private void EndProcess() {
 		_ePhaseType = PhaseType.INITIAL;
+		score++;
 	}
 
 	private void GameOverProcess() {
 		Debug.Log("ゲームオーバー");
+		if(score > PlayerPrefs.GetInt (HIGH_SCORE_KEY, 0)) {
+			PlayerPrefs.SetInt(HIGH_SCORE_KEY, score);
+			score = 0;
+		}Debug.Log("ハイスコア="+PlayerPrefs.GetInt (HIGH_SCORE_KEY, 0));
+		GameSceneManager.Instance.LoadGamaOverScene();
 	}
 
 	public void SetGameOver() {

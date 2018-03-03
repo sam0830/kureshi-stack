@@ -501,6 +501,7 @@ PlayerSettings:
   webGLCompressionFormat: 1
   scriptingDefineSymbols:
     1: TOUCHSCRIPT_DEBUG
+    7: TOUCHSCRIPT_DEBUG
   platformArchitecture: {}
   scriptingBackend: {}
   incrementalIl2cppBuild: {}

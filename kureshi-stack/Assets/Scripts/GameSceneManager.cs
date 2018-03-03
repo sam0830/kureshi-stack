@@ -12,4 +12,8 @@ public class GameSceneManager : SingletonMonoBehaviour<GameSceneManager> {
 	public void LoadTitleScene() {
 		SceneManager.LoadScene("title");
 	}
+
+	public void LoadGamaOverScene() {
+		SceneManager.LoadScene("gameover");
+	}
 }
