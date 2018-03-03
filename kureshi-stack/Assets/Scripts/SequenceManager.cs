@@ -16,6 +16,7 @@ using UnityEngine;
 public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	public enum PhaseType{
 		INITIAL,
+		SETPOSITION,
 		USER,
 		WAIT,
 		END,
@@ -47,7 +48,13 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	/**
 	 * モデルの出現場所
 	 */
-	private static readonly Vector3 INITIAL_POSITION = new Vector3(1f,1f,1f);
+	private static readonly Vector3 INITIAL_POSITION = new Vector3(0f,3f,0f);
+
+	/**
+	 * モデルの待機場所
+	 * @type {Vector3}
+	 */
+	private static readonly Vector3 WAIT_POSITION = new Vector3(0f,1f,0f);
 
 	/**
 	 * ユーザが操作可能な時間
@@ -69,6 +76,12 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	private const string HIGH_SCORE_KEY = "high_score";
 
 	/**
+	 * SEのキー
+	 * @type {string}
+	 */
+	private const string SET_POSITION_SE = "SetPositionSE";
+
+	/**
 	 * 現在のスコア保存
 	 * @type {int}
 	 */
@@ -85,6 +98,9 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 		switch(_ePhaseType) {
 			case PhaseType.INITIAL:
 				InitialProcess();
+				break;
+			case PhaseType.SETPOSITION:
+				SetPositionProcess();
 				break;
 			case PhaseType.USER:
 				UserProcess();
@@ -107,8 +123,16 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 		_popupObject = Instantiate(_kureshiList[Random.Range(0, _kureshiList.Count)],
 		INITIAL_POSITION,
 		Quaternion.identity);
-		_ePhaseType = PhaseType.USER;
+		_ePhaseType = PhaseType.SETPOSITION;
 		return;
+	}
+
+	private void SetPositionProcess() {
+		_popupObject.transform.position = Vector3.MoveTowards(_popupObject.transform.position, WAIT_POSITION, Time.deltaTime*4.0f);
+		if(_popupObject.transform.position == WAIT_POSITION) {
+			AudioManager.Instance.PlaySE(SET_POSITION_SE);
+			_ePhaseType = PhaseType.USER;
+		}
 	}
 
 	private void UserProcess() {

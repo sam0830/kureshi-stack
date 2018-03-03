@@ -5,6 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class GameSceneManager : SingletonMonoBehaviour<GameSceneManager> {
 
+	private void Awake() {
+		DontDestroyOnLoad(this.gameObject);
+	}
+
 	public void LoadGameScene() {
 		SceneManager.LoadScene("game");
 	}
