@@ -14,6 +14,7 @@ public class SequenceManager : MonoBehaviour {
 	public enum PhaseType{
 		INITIAL,
 		USER,
+		WAIT,
 		END
 	}
 
@@ -33,6 +34,12 @@ public class SequenceManager : MonoBehaviour {
 	 * @type {float}
 	 */
 	private float _userTime = 0;
+
+	/**
+	 * 待ち時間
+	 * @type {float}
+	 */
+	private float _waitTime = 0;
 	/**
 	 * モデルの出現場所
 	 */
@@ -42,7 +49,14 @@ public class SequenceManager : MonoBehaviour {
 	 * ユーザが操作可能な時間
 	 * @type {float}
 	 */
+	[SerializeField]
 	private const float USER_TIME = 5.0f;
+	/**
+	 * 静止のための待ち時間
+	 * @type {float}
+	 */
+	[SerializeField]
+	private const float WAIT_TIME = 3.0f;
 
 	[SerializeField]
 	private List<GameObject> _kureshiList;
@@ -58,6 +72,9 @@ public class SequenceManager : MonoBehaviour {
 				break;
 			case PhaseType.USER:
 				UserProcess();
+				break;
+			case PhaseType.WAIT:
+				WaitProcess();
 				break;
 			case PhaseType.END:
 				EndProcess();
@@ -79,13 +96,23 @@ public class SequenceManager : MonoBehaviour {
 		_userTime += Time.deltaTime;
 		if(_userTime >= USER_TIME) {
 			_userTime = 0;
+			_popupObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+			_ePhaseType = PhaseType.WAIT;
+		}
+		return;
+	}
+
+	private void WaitProcess() {
+		_waitTime += Time.deltaTime;
+		if(_waitTime >= WAIT_TIME) {
+			_waitTime = 0;
 			_ePhaseType = PhaseType.END;
+
 		}
 		return;
 	}
 
 	private void EndProcess() {
-		_popupObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
 		_ePhaseType = PhaseType.INITIAL;
 	}
 }
