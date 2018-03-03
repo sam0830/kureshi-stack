@@ -5,7 +5,7 @@ using UnityEngine;
 public class StartButton : MonoBehaviour {
 
 	public void OnClick() {
-		Debug.Log("ボタンを押した");
+		Debug.Log("ゲーム開始");
 		GameSceneManager.Instance.LoadGameScene();
 	}
 }
