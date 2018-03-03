@@ -8,14 +8,18 @@ using UnityEngine;
  * 2. カウントダウン開始
  * 3. ユーザの入力受付(ドラッグ: 移動, )
  * 4. カウントダウン終了後落下(Rigidbody dynamic)
+ * 5. 静止の待ち時間
+ * 6. 1に戻る
+ * 6.1 ゲームオーバーならゲームオーバーの瞬間の画像を背景に遷移
  * @type {[type]}
  */
-public class SequenceManager : MonoBehaviour {
+public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	public enum PhaseType{
 		INITIAL,
 		USER,
 		WAIT,
-		END
+		END,
+		GAMEOVER
 	}
 
 	/**
@@ -79,6 +83,9 @@ public class SequenceManager : MonoBehaviour {
 			case PhaseType.END:
 				EndProcess();
 				break;
+			case PhaseType.GAMEOVER:
+				GameOverProcess();
+				break;
 			default:
 				break;
 		}
@@ -107,7 +114,6 @@ public class SequenceManager : MonoBehaviour {
 		if(_waitTime >= WAIT_TIME) {
 			_waitTime = 0;
 			_ePhaseType = PhaseType.END;
-
 		}
 		return;
 	}
@@ -115,4 +121,13 @@ public class SequenceManager : MonoBehaviour {
 	private void EndProcess() {
 		_ePhaseType = PhaseType.INITIAL;
 	}
+
+	private void GameOverProcess() {
+		Debug.Log("ゲームオーバー");
+	}
+
+	public void SetGameOver() {
+		_ePhaseType = PhaseType.GAMEOVER;
+	}
+
 }
