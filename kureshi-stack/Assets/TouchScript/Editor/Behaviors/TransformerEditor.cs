@@ -20,6 +20,7 @@ namespace TouchScript.Editor.Behaviors
 		public static readonly GUIContent TEXT_SCALE_THRESHOLD = new GUIContent("Scale Threshold", "Minimum difference between target scale and smoothed scale when to stop automatic movement.");
 		public static readonly GUIContent TEXT_ALLOW_CHANGING = new GUIContent("Allow Changing From Outside", "Indicates if this transform can be changed from another script.");
 		public static readonly GUIContent TEXT_SMOOTHING_FACTOR_DESC = new GUIContent("Indicates how much smoothing to apply. \n0 - no smoothing, 100000 - maximum.");
+        public static readonly GUIContent TEXT_LIMIT_Y_AXIS = new GUIContent("Limit Y Axis", "In translating, limit Y axis move.");
 
 		public static readonly GUIContent TEXT_HELP = new GUIContent("This component receives transform data from Transform Gestures and applies changes to the GameObject.");
 
@@ -27,11 +28,13 @@ namespace TouchScript.Editor.Behaviors
 
         private SerializedProperty enableSmoothing, allowChangingFromOutside;
 		private PropertyInfo enableSmoothing_prop;
+        private SerializedProperty limitYAxis;
 
         protected virtual void OnEnable()
         {
             enableSmoothing = serializedObject.FindProperty("enableSmoothing");
             allowChangingFromOutside = serializedObject.FindProperty("allowChangingFromOutside");
+            limitYAxis = serializedObject.FindProperty("limitYAxis");
 
             instance = target as Transformer;
 
@@ -64,6 +67,7 @@ namespace TouchScript.Editor.Behaviors
 				}
 				EditorGUI.indentLevel--;
 			}
+            EditorGUILayout.PropertyField(limitYAxis, TEXT_LIMIT_Y_AXIS);
             EditorGUILayout.LabelField(TEXT_HELP, GUIElements.HelpBox);
 
             serializedObject.ApplyModifiedProperties();
