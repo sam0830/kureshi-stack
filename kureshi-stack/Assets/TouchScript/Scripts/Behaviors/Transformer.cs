@@ -66,6 +66,18 @@ namespace TouchScript.Behaviors
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether limitYAxis is enabled.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if limitYAxis is enabled; otherwise, <c>false</c>.
+        /// </value>
+        public bool LimitYAxis
+        {
+            get { return limitYAxis; }
+            set { limitYAxis = value; }
+        }
+
+        /// <summary>
         /// Gets or sets the smoothing factor.
         /// </summary>
         /// <value>
@@ -128,6 +140,10 @@ namespace TouchScript.Behaviors
         #endregion
 
         #region Private variables
+
+        [SerializeField]
+        [ToggleLeft]
+        private bool limitYAxis = false;
 
         [SerializeField]
         [ToggleLeft]
@@ -318,6 +334,7 @@ namespace TouchScript.Behaviors
             if ((mask & TransformGesture.TransformType.Rotation) != 0)
                 targetRotation = Quaternion.AngleAxis(gesture.DeltaRotation, gesture.RotationAxis) * targetRotation;
             if ((mask & TransformGesture.TransformType.Translation) != 0) targetPosition += gesture.DeltaPosition;
+            if(limitYAxis) targetPosition -= new Vector3(0, gesture.DeltaPosition.y, 0); 
             transformMask |= mask;
 
             gesture.OverrideTargetPosition(targetPosition);
