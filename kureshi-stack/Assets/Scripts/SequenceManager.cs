@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TouchScript.Gestures.TransformGestures;
 
 /**
  * ゲームの流れを管理するクラス
@@ -11,7 +12,7 @@ using UnityEngine;
  * 5. 静止の待ち時間
  * 6. 1に戻る
  * 6.1 ゲームオーバーならゲームオーバーの瞬間の画像を背景に遷移
- * @type {[type]}
+ * @type {class}
  */
 public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	public enum PhaseType{
@@ -38,13 +39,19 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	 * 経過時間
 	 * @type {float}
 	 */
-	private float _userTime = 0;
+	private float _userTime = USER_TIME;
 
 	/**
 	 * 待ち時間
 	 * @type {float}
 	 */
 	private float _waitTime = 0;
+
+	/**
+	 * モデルの初期状態の角度
+	 * @type {float}
+	 */
+	private float _initialAngleZ = 0;
 	/**
 	 * モデルの出現場所
 	 */
@@ -61,7 +68,7 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	 * @type {float}
 	 */
 	[SerializeField]
-	private const float USER_TIME = 5.0f;
+	private const float USER_TIME = 10.0f;
 	/**
 	 * 静止のための待ち時間
 	 * @type {float}
@@ -85,10 +92,15 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	 * 現在のスコア保存
 	 * @type {int}
 	 */
-	 private int score = 0;
+	 private int _score = 0;
 
 	[SerializeField]
 	private List<GameObject> _kureshiList;
+
+	public float UserTime {
+		get { return _userTime; }
+		set { _userTime = value; }
+	}
 
 	private void Start() {
 
@@ -123,6 +135,7 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 		_popupObject = Instantiate(_kureshiList[Random.Range(0, _kureshiList.Count)],
 		INITIAL_POSITION,
 		Quaternion.identity);
+		_initialAngleZ = _popupObject.transform.rotation.z;
 		_ePhaseType = PhaseType.SETPOSITION;
 		return;
 	}
@@ -136,10 +149,12 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	}
 
 	private void UserProcess() {
-		_userTime += Time.deltaTime;
-		if(_userTime >= USER_TIME) {
-			_userTime = 0;
+		_userTime -= Time.deltaTime;
+		if(_userTime <= 0) {
+			_userTime = USER_TIME;
 			_popupObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+			_popupObject.GetComponent<TransformGesture>().Type = TransformGesture.TransformType.None;
+
 			_ePhaseType = PhaseType.WAIT;
 		}
 		return;
@@ -155,21 +170,29 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	}
 
 	private void EndProcess() {
+		_initialAngleZ = 0;
 		_ePhaseType = PhaseType.INITIAL;
-		score++;
+		_score++;
 	}
 
 	private void GameOverProcess() {
 		Debug.Log("ゲームオーバー");
-		if(score > PlayerPrefs.GetInt (HIGH_SCORE_KEY, 0)) {
-			PlayerPrefs.SetInt(HIGH_SCORE_KEY, score);
-			score = 0;
+		if(_score > PlayerPrefs.GetInt (HIGH_SCORE_KEY, 0)) {
+			PlayerPrefs.SetInt(HIGH_SCORE_KEY, _score);
+			_score = 0;
 		}Debug.Log("ハイスコア="+PlayerPrefs.GetInt (HIGH_SCORE_KEY, 0));
 		GameSceneManager.Instance.LoadGamaOverScene();
 	}
 
 	public void SetGameOver() {
 		_ePhaseType = PhaseType.GAMEOVER;
+	}
+
+	public void RoatateModel(float angle) {
+		if(_ePhaseType != PhaseType.USER) {
+			return;
+		}
+		_popupObject.transform.rotation = Quaternion.Euler(0, 0, _initialAngleZ + angle);
 	}
 
 }
