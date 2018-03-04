@@ -334,7 +334,7 @@ namespace TouchScript.Behaviors
             if ((mask & TransformGesture.TransformType.Rotation) != 0)
                 targetRotation = Quaternion.AngleAxis(gesture.DeltaRotation, gesture.RotationAxis) * targetRotation;
             if ((mask & TransformGesture.TransformType.Translation) != 0) targetPosition += gesture.DeltaPosition;
-            if(limitYAxis) targetPosition -= new Vector3(0, gesture.DeltaPosition.y, 0); 
+            if(limitYAxis) targetPosition -= new Vector3(0, gesture.DeltaPosition.y, 0);
             transformMask |= mask;
 
             gesture.OverrideTargetPosition(targetPosition);
