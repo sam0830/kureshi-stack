@@ -5,10 +5,6 @@ using TouchScript.Gestures.TransformGestures;
 using TouchScript.Hit;
 
 public class ObjectHandler : MonoBehaviour {
-	/**
-	 * 初期位置
-	 */
-	private Vector3 _initialPosition;
 
 	private void OnEnable() {
 	    // Transform Gestureのdelegateに登録
