@@ -108,12 +108,13 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
 			_nextBGMName = "";
 			AttachBGMSource.clip = _bgmDic [bgmName] as AudioClip;
 			AttachBGMSource.Play ();
+			return;
 		}
 		//違うBGMが流れている時は、流れているBGMをフェードアウトさせてから次を流す。同じBGMが流れている時はスルー
-		else if (AttachBGMSource.clip.name != bgmName) {
+		//if (AttachBGMSource.clip.name != bgmName) {
 			_nextBGMName = bgmName;
 			FadeOutBGM (fadeSpeedRate);
-		}
+		//}
 
 	}
 
