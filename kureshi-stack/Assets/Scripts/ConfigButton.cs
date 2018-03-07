@@ -8,16 +8,16 @@ public class ConfigButton : MonoBehaviour {
 	[SerializeField]
 	private Canvas configModalWindow;
 	[SerializeField]
-	private Slider BGMSlider;
+	private Slider bgmSlider;
 	[SerializeField]
-	private Slider SESlider;
+	private Slider seSlider;
 
 	private void Start() {
-		if(BGMSlider == null) {
-			BGMSlider = GameObject.Find("ConfigModalWindow/BGMSlider").GetComponent<Slider>();
+		if(bgmSlider == null) {
+			bgmSlider = GameObject.Find("ConfigModalWindow/BGMSlider").GetComponent<Slider>();
 		}
-		if(SESlider == null) {
-			SESlider = GameObject.Find("ConfigModalWindow/SESlider").GetComponent<Slider>();
+		if(seSlider == null) {
+			seSlider = GameObject.Find("ConfigModalWindow/SESlider").GetComponent<Slider>();
 		}
 		if(configModalWindow == null) {
 			configModalWindow = GameObject.Find("ConfigModalWindow").GetComponent<Canvas>();
