@@ -16,11 +16,11 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
 	//BGMがフェードするのにかかる時間
 	public const float BGM_FADE_SPEED_RATE_HIGH = 0.9f;
 	public const float BGM_FADE_SPEED_RATE_LOW = 0.3f;
-	private float _bgmFadeSpeedRate = BGM_FADE_SPEED_RATE_HIGH;
+	private float bgmFadeSpeedRate = BGM_FADE_SPEED_RATE_HIGH;
 
 	//次流すBGM名、SE名
-	private string _nextBGMName;
-	private string _nextSEName;
+	private string nextBGMName;
+	private string nextSEName;
 
 	//BGMをフェードアウト中か
 	private bool _isFadeOut = false;
@@ -29,7 +29,7 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
 	public AudioSource AttachBGMSource, AttachSESource;
 
 	//全Audioを保持
-	private Dictionary<string, AudioClip> _bgmDic, _seDic;
+	private Dictionary<string, AudioClip> bgmDic, seDic;
 
 	//=================================================================================
 	//初期化
@@ -45,17 +45,17 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
 		DontDestroyOnLoad (this.gameObject);
 
 		//リソースフォルダから全SE&BGMのファイルを読み込みセット
-		_bgmDic = new Dictionary<string, AudioClip> ();
-		_seDic  = new Dictionary<string, AudioClip> ();
+		bgmDic = new Dictionary<string, AudioClip> ();
+		seDic  = new Dictionary<string, AudioClip> ();
 
 		object[] bgmList = Resources.LoadAll ("Audio/BGM");
 		object[] seList  = Resources.LoadAll ("Audio/SE");
 
 		foreach (AudioClip bgm in bgmList) {
-			_bgmDic [bgm.name] = bgm;
+			bgmDic [bgm.name] = bgm;
 		}
 		foreach (AudioClip se in seList) {
-			_seDic [se.name] = se;
+			seDic [se.name] = se;
 		}
 	}
 
@@ -74,18 +74,18 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
 	/// </summary>
 	public void PlaySE (string seName, float delay = 0.0f)
 	{
-		if (!_seDic.ContainsKey (seName)) {
+		if (!seDic.ContainsKey (seName)) {
 			Debug.Log (seName + "という名前のSEがありません");
 			return;
 		}
 
-		_nextSEName = seName;
+		nextSEName = seName;
 		Invoke ("DelayPlaySE", delay);
 	}
 
 	private void DelayPlaySE ()
 	{
-		AttachSESource.PlayOneShot (_seDic [_nextSEName] as AudioClip);
+		AttachSESource.PlayOneShot (seDic [nextSEName] as AudioClip);
 	}
 
 	//=================================================================================
@@ -98,23 +98,36 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
 	/// </summary>
 	public void PlayBGM (string bgmName, float fadeSpeedRate = BGM_FADE_SPEED_RATE_HIGH)
 	{
-		if (!_bgmDic.ContainsKey (bgmName)) {
+		if (!bgmDic.ContainsKey (bgmName)) {
 			Debug.Log (bgmName + "という名前のBGMがありません");
 			return;
 		}
 
 		//現在BGMが流れていない時はそのまま流す
 		if (!AttachBGMSource.isPlaying) {
-			_nextBGMName = "";
-			AttachBGMSource.clip = _bgmDic [bgmName] as AudioClip;
+			nextBGMName = "";
+			AttachBGMSource.clip = bgmDic [bgmName] as AudioClip;
 			AttachBGMSource.Play ();
 			return;
 		}
 		//違うBGMが流れている時は、流れているBGMをフェードアウトさせてから次を流す。同じBGMが流れている時はスルー
 		//if (AttachBGMSource.clip.name != bgmName) {
-			_nextBGMName = bgmName;
+			nextBGMName = bgmName;
 			FadeOutBGM (fadeSpeedRate);
 		//}
+
+	}
+
+	public void TryAudio(string seName, float volume) {
+		if (!seDic.ContainsKey (seName)) {
+			Debug.Log (seName + "という名前のSEがありません");
+			return;
+		}
+
+		if (!AttachSESource.isPlaying) {
+			AttachSESource.PlayOneShot (seDic [seName] as AudioClip, volume);
+			return;
+		}
 
 	}
 
@@ -124,7 +137,7 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
 	/// </summary>
 	public void FadeOutBGM (float fadeSpeedRate = BGM_FADE_SPEED_RATE_LOW)
 	{
-		_bgmFadeSpeedRate = fadeSpeedRate;
+		bgmFadeSpeedRate = fadeSpeedRate;
 		_isFadeOut = true;
 	}
 
@@ -135,14 +148,14 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
 		}
 
 		//徐々にボリュームを下げていき、ボリュームが0になったらボリュームを戻し次の曲を流す
-		AttachBGMSource.volume -= Time.deltaTime * _bgmFadeSpeedRate;
+		AttachBGMSource.volume -= Time.deltaTime * bgmFadeSpeedRate;
 		if (AttachBGMSource.volume <= 0) {
 			AttachBGMSource.Stop ();
 			AttachBGMSource.volume = PlayerPrefs.GetFloat (BGM_VOLUME_KEY, BGM_VOLUME_DEFULT);
 			_isFadeOut = false;
 
-			if (!string.IsNullOrEmpty (_nextBGMName)) {
-				PlayBGM (_nextBGMName);
+			if (!string.IsNullOrEmpty (nextBGMName)) {
+				PlayBGM (nextBGMName);
 			}
 		}
 
