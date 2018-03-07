@@ -5,6 +5,19 @@ using TouchScript.Gestures.TransformGestures;
 using TouchScript.Hit;
 
 public class ObjectHandler : MonoBehaviour {
+	[SerializeField]
+	private Vector3 CENTER_OF_GRAVITY = new Vector3(0f,0f,0f);
+	private Rigidbody2D rigidboy2D;
+
+	private void Start() {
+		rigidboy2D = GetComponent<Rigidbody2D>();
+		rigidboy2D.centerOfMass = CENTER_OF_GRAVITY;
+	}
+
+	private void OnDrawGizmos() {
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere (transform.position + transform.rotation * CENTER_OF_GRAVITY, 0.1f);
+    }
 
 	private void OnEnable() {
 	    // Transform Gestureのdelegateに登録
