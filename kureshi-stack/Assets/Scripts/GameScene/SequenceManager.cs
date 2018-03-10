@@ -21,7 +21,7 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 		USER,
 		WAIT,
 		END,
-		GAMEOVER
+		GAMEOVER,
 	}
 
 	/**
@@ -94,16 +94,30 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	 */
 	 private int _score = 0;
 
-	[SerializeField]
-	private List<GameObject> _kureshiList;
+	 [SerializeField]
+	 private Canvas gameoverCanvas;
+
+	 [SerializeField]
+	 private List<GameObject> _kureshiList;
+
+	 private static readonly GameObject PREFAB_GAMEOVER_VIEW;
 
 	public float UserTime {
 		get { return _userTime; }
 		set { _userTime = value; }
 	}
 
-	private void Start() {
+	public int Score {
+		get { return _score; }
+		set { _score = value; }
+	}
 
+	private void Start() {
+		if(gameoverCanvas == null) {
+			gameoverCanvas = GameObject.Find("GameOverView").GetComponent<Canvas>();
+		}
+		gameoverCanvas.enabled = false;
+		Time.timeScale = 1.0f; // 前回ゲームオーバーの場合時間が止まっている
 	}
 
 	private void Update() {
@@ -176,15 +190,22 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	}
 
 	private void GameOverProcess() {
+		// ゲームオーバー画面で毎フレーム呼ばれる
+	}
+
+	public void SetGameOver() {
 		Debug.Log("ゲームオーバー");
 		if(_score > PlayerPrefs.GetInt (HIGH_SCORE_KEY, 0)) {
 			PlayerPrefs.SetInt(HIGH_SCORE_KEY, _score);
 			_score = 0;
-		}Debug.Log("ハイスコア="+PlayerPrefs.GetInt (HIGH_SCORE_KEY, 0));
-		GameSceneManager.Instance.LoadGamaOverScene();
-	}
-
-	public void SetGameOver() {
+		}
+		Debug.Log("ハイスコア="+PlayerPrefs.GetInt (HIGH_SCORE_KEY, 0));
+		/**
+		 * ゲームを一時停止する
+		 * ゲームオーバービューを表示
+		 */
+		Time.timeScale = 0;
+		gameoverCanvas.enabled = true;
 		_ePhaseType = PhaseType.GAMEOVER;
 	}
 
@@ -193,6 +214,10 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 			return;
 		}
 		_popupObject.transform.rotation = Quaternion.Euler(0, 0, _initialAngleZ + angle);
+	}
+
+	public int GetHighScore() {
+		return PlayerPrefs.GetInt(HIGH_SCORE_KEY, 0);
 	}
 
 }

@@ -23,10 +23,12 @@ public class GameSceneManager : SingletonMonoBehaviour<GameSceneManager> {
 		SceneManager.LoadScene("title");
 	}
 
+	/*
 	public void LoadGamaOverScene() {
 		AudioManager.Instance.FadeOutBGM();
 		SceneManager.LoadScene("gameover");
 	}
+	*/
 
 	public void LoadHowToScene() {
 		SceneManager.LoadScene("howto");
