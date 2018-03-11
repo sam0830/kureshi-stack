@@ -18,6 +18,7 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	public enum PhaseType{
 		INITIAL,
 		SETPOSITION,
+		CAMERAMOVE,
 		USER,
 		WAIT,
 		END,
@@ -55,13 +56,19 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	/**
 	 * モデルの出現場所
 	 */
-	private static readonly Vector3 INITIAL_POSITION = new Vector3(0f,3f,0f);
+	private static readonly Vector3 INITIAL_POSITION = new Vector3(0f, 3f, 0f);
 
 	/**
 	 * モデルの待機場所
 	 * @type {Vector3}
 	 */
-	private static readonly Vector3 WAIT_POSITION = new Vector3(0f,1f,0f);
+	private static readonly Vector3 WAIT_POSITION = new Vector3(0f, 1f, 0f);
+
+	/**
+	 * カメラの移動する高さ
+	 * @type {Vector3}
+	 */
+	private static readonly Vector3 CAMERA_MOVE_HEIGHT = new Vector3(0f, 1f, 0f);
 
 	/**
 	 * ユーザが操作可能な時間
@@ -89,6 +96,12 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	private const string SET_POSITION_SE = "SetPositionSE";
 
 	/**
+	 * カメラ位置に既にオブジェクトがあるかどうか
+	 * @type {bool}
+	 */
+	private bool _isExistKureshi = false;
+
+	/**
 	 * 現在のスコア保存
 	 * @type {int}
 	 */
@@ -98,9 +111,15 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	 private Canvas gameoverCanvas;
 
 	 [SerializeField]
+	 private GameObject mainCamera;
+
+	 [SerializeField]
 	 private List<GameObject> _kureshiList;
 
 	 private static readonly GameObject PREFAB_GAMEOVER_VIEW;
+
+	 private Vector3 cameraTargetPos = new Vector3(0f, 0f, 0f);
+	 private Vector3 kureshiTargetPos = WAIT_POSITION;
 
 	public float UserTime {
 		get { return _userTime; }
@@ -112,9 +131,21 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 		set { _score = value; }
 	}
 
+	public bool IsExistKureshi {
+		get { return _isExistKureshi; }
+		set { _isExistKureshi = value; }
+	}
+
+	public PhaseType ePhaseType {
+		get { return _ePhaseType; }
+	}
+
 	private void Start() {
 		if(gameoverCanvas == null) {
 			gameoverCanvas = GameObject.Find("GameOverView").GetComponent<Canvas>();
+		}
+		if(mainCamera == null) {
+			mainCamera = GameObject.Find("Main Camera");
 		}
 		gameoverCanvas.enabled = false;
 		Time.timeScale = 1.0f; // 前回ゲームオーバーの場合時間が止まっている
@@ -127,6 +158,9 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 				break;
 			case PhaseType.SETPOSITION:
 				SetPositionProcess();
+				break;
+			case PhaseType.CAMERAMOVE:
+				CameraMoveProcess();
 				break;
 			case PhaseType.USER:
 				UserProcess();
@@ -155,9 +189,24 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	}
 
 	private void SetPositionProcess() {
+		// 呉氏の初期位置への移動
 		_popupObject.transform.position = Vector3.MoveTowards(_popupObject.transform.position, WAIT_POSITION, Time.deltaTime*4.0f);
 		if(_popupObject.transform.position == WAIT_POSITION) {
-			AudioManager.Instance.PlaySE(SET_POSITION_SE);
+			AudioManager.Instance.PlaySE(SET_POSITION_SE);Debug.Log(_isExistKureshi);
+			if(_isExistKureshi) {
+				cameraTargetPos = mainCamera.transform.position + CAMERA_MOVE_HEIGHT;
+				kureshiTargetPos = kureshiTargetPos + Vector3.up;
+				_ePhaseType = PhaseType.CAMERAMOVE;
+				return;
+			}
+			_ePhaseType = PhaseType.USER;
+		}
+	}
+
+	private void CameraMoveProcess() {
+		mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, cameraTargetPos, Time.deltaTime);
+		_popupObject.transform.position = Vector3.MoveTowards(_popupObject.transform.position, kureshiTargetPos, Time.deltaTime);
+		if(mainCamera.transform.position == cameraTargetPos && _popupObject.transform.position == kureshiTargetPos) {
 			_ePhaseType = PhaseType.USER;
 		}
 	}
@@ -168,7 +217,7 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 			_userTime = USER_TIME;
 			_popupObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
 			_popupObject.GetComponent<TransformGesture>().Type = TransformGesture.TransformType.None;
-
+			_popupObject.GetComponent<PolygonCollider2D>().isTrigger = false;
 			_ePhaseType = PhaseType.WAIT;
 		}
 		return;
@@ -185,8 +234,10 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 
 	private void EndProcess() {
 		_initialAngleZ = 0;
-		_ePhaseType = PhaseType.INITIAL;
 		_score++;
+		_isExistKureshi = false;
+		_ePhaseType = PhaseType.INITIAL;
+
 	}
 
 	private void GameOverProcess() {
