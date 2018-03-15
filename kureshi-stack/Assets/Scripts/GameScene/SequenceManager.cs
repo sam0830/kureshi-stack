@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TouchScript.Gestures.TransformGestures;
+using Common;
 
 /**
  * ゲームの流れを管理するクラス
- * 1. 3Dモデルが画面の一定位置に出現(固定)
+ * 1. 3Dモデルが画面の一定位置に出現
  * 2. カウントダウン開始
  * 3. ユーザの入力受付(ドラッグ: 移動, )
  * 4. カウントダウン終了後落下(Rigidbody dynamic)
@@ -53,22 +54,6 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	 * @type {float}
 	 */
 	private float _initialAngleZ = 0;
-	/**
-	 * モデルの出現場所
-	 */
-	private static readonly Vector3 INITIAL_POSITION = new Vector3(0f, 3f, 0f);
-
-	/**
-	 * モデルの待機場所
-	 * @type {Vector3}
-	 */
-	private static readonly Vector3 WAIT_POSITION = new Vector3(0f, 1f, 0f);
-
-	/**
-	 * カメラの移動する高さ
-	 * @type {Vector3}
-	 */
-	private static readonly Vector3 CAMERA_MOVE_HEIGHT = new Vector3(0f, 1f, 0f);
 
 	/**
 	 * ユーザが操作可能な時間
@@ -82,18 +67,6 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	 */
 	[SerializeField]
 	private const float WAIT_TIME = 3.0f;
-
-	/**
-	 * ハイスコアのキー
-	 * @type {string}
-	 */
-	private const string HIGH_SCORE_KEY = "high_score";
-
-	/**
-	 * SEのキー
-	 * @type {string}
-	 */
-	private const string SET_POSITION_SE = "SetPositionSE";
 
 	/**
 	 * カメラ位置に既にオブジェクトがあるかどうか
@@ -116,10 +89,9 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	 [SerializeField]
 	 private List<GameObject> _kureshiList;
 
-	 private static readonly GameObject PREFAB_GAMEOVER_VIEW;
-
 	 private Vector3 cameraTargetPos = new Vector3(0f, 0f, 0f);
-	 private Vector3 kureshiTargetPos = WAIT_POSITION;
+	 private Vector3 kureshiTargetPos = Constant.WAIT_POSITION;
+	 private Vector3 kureshiInitialPos = Constant.INITIAL_POSITION;
 
 	public float UserTime {
 		get { return _userTime; }
@@ -156,11 +128,11 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 			case PhaseType.INITIAL:
 				InitialProcess();
 				break;
-			case PhaseType.SETPOSITION:
-				SetPositionProcess();
-				break;
 			case PhaseType.CAMERAMOVE:
 				CameraMoveProcess();
+				break;
+			case PhaseType.SETPOSITION:
+				SetPositionProcess();
 				break;
 			case PhaseType.USER:
 				UserProcess();
@@ -179,34 +151,44 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 		}
 	}
 
+	/**
+	 * 呉氏のオブジェクトを初期位置に生成するメソッド
+	 * 場合によってよってはカメラの位置移動処理へ遷移
+	 */
 	private void InitialProcess() {
+		if(_isExistKureshi) {
+			cameraTargetPos = mainCamera.transform.position + Constant.CAMERA_MOVE_HEIGHT;
+			kureshiTargetPos = kureshiTargetPos + Vector3.up;
+			kureshiInitialPos = kureshiInitialPos + Vector3.up;
+			_popupObject = Instantiate(_kureshiList[Random.Range(0, _kureshiList.Count)],
+			kureshiInitialPos,
+			Quaternion.identity);
+			_initialAngleZ = _popupObject.transform.rotation.z;
+			_ePhaseType = PhaseType.CAMERAMOVE;
+			return;
+		}
 		_popupObject = Instantiate(_kureshiList[Random.Range(0, _kureshiList.Count)],
-		INITIAL_POSITION,
+		kureshiInitialPos,
 		Quaternion.identity);
 		_initialAngleZ = _popupObject.transform.rotation.z;
 		_ePhaseType = PhaseType.SETPOSITION;
-		return;
 	}
+
+	/**
+	 * カメラ移動中に毎フレーム呼ばれるメソッド
+	 */
+	 private void CameraMoveProcess() {
+ 		mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, cameraTargetPos, Time.deltaTime);
+ 		if(mainCamera.transform.position == cameraTargetPos) {
+ 			_ePhaseType = PhaseType.SETPOSITION;
+ 		}
+ 	}
 
 	private void SetPositionProcess() {
 		// 呉氏の初期位置への移動
-		_popupObject.transform.position = Vector3.MoveTowards(_popupObject.transform.position, WAIT_POSITION, Time.deltaTime*4.0f);
-		if(_popupObject.transform.position == WAIT_POSITION) {
-			AudioManager.Instance.PlaySE(SET_POSITION_SE);Debug.Log(_isExistKureshi);
-			if(_isExistKureshi) {
-				cameraTargetPos = mainCamera.transform.position + CAMERA_MOVE_HEIGHT;
-				kureshiTargetPos = kureshiTargetPos + Vector3.up;
-				_ePhaseType = PhaseType.CAMERAMOVE;
-				return;
-			}
-			_ePhaseType = PhaseType.USER;
-		}
-	}
-
-	private void CameraMoveProcess() {
-		mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, cameraTargetPos, Time.deltaTime);
-		_popupObject.transform.position = Vector3.MoveTowards(_popupObject.transform.position, kureshiTargetPos, Time.deltaTime);
-		if(mainCamera.transform.position == cameraTargetPos && _popupObject.transform.position == kureshiTargetPos) {
+		_popupObject.transform.position = Vector3.MoveTowards(_popupObject.transform.position, kureshiTargetPos, Time.deltaTime*4.0f);
+		if(_popupObject.transform.position == kureshiTargetPos) {
+			AudioManager.Instance.PlaySE(Constant.SET_POSITION_SE);
 			_ePhaseType = PhaseType.USER;
 		}
 	}
@@ -223,6 +205,9 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 		return;
 	}
 
+	/**
+	 * ユーザ操作終了後の待ち時間
+	 */
 	private void WaitProcess() {
 		_waitTime += Time.deltaTime;
 		if(_waitTime >= WAIT_TIME) {
@@ -235,9 +220,9 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	private void EndProcess() {
 		_initialAngleZ = 0;
 		_score++;
+		_popupObject.tag = Constant.STACKED_TAG_NAME;
 		_isExistKureshi = false;
 		_ePhaseType = PhaseType.INITIAL;
-
 	}
 
 	private void GameOverProcess() {
@@ -246,11 +231,11 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 
 	public void SetGameOver() {
 		Debug.Log("ゲームオーバー");
-		if(_score > PlayerPrefs.GetInt (HIGH_SCORE_KEY, 0)) {
-			PlayerPrefs.SetInt(HIGH_SCORE_KEY, _score);
+		if(_score > PlayerPrefs.GetInt (Constant.HIGH_SCORE_KEY, 0)) {
+			PlayerPrefs.SetInt(Constant.HIGH_SCORE_KEY, _score);
 			_score = 0;
 		}
-		Debug.Log("ハイスコア="+PlayerPrefs.GetInt (HIGH_SCORE_KEY, 0));
+		Debug.Log("ハイスコア="+PlayerPrefs.GetInt (Constant.HIGH_SCORE_KEY, 0));
 		/**
 		 * ゲームを一時停止する
 		 * ゲームオーバービューを表示
@@ -268,7 +253,7 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	}
 
 	public int GetHighScore() {
-		return PlayerPrefs.GetInt(HIGH_SCORE_KEY, 0);
+		return PlayerPrefs.GetInt(Constant.HIGH_SCORE_KEY, 0);
 	}
 
 }
