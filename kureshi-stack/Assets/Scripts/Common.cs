@@ -38,21 +38,39 @@ namespace Common {
 
 		/**
 		 * ハイスコア文字列
-		 * @type {String}
+		 * @type {string}
 		 */
-		public const string PREFIX_STRING = "HighScore\n";
+		public const string HIGH_SCORE_PREFIX_STRING = "HighScore\n";
+
+		/**
+		 * 現在のスコア文字列
+		 * @type {string}
+		 */
+		public const string CURRENT_SCORE_PREFIX_STRING = "Your Score\n";
 
 		/**
 		 * ハイスコアオブジェクトの初期位置(移動前の位置)
 		 * @type {Vector3}
 		 */
-		public static readonly Vector3 HIGH_SCORE_TEXT_INITIAL_POSITION = new Vector3(0f, 855f, 0f);
+		public static readonly Vector3 HIGH_SCORE_TEXT_INITIAL_POSITION = new Vector3(-700f, 260f, 0f);
 
 		/**
 		 * ハイスコアオブジェクトの移動後の位置
 		 * @type {Vector3}
 		 */
-		public static readonly Vector3 HIGH_SCORE_TEXT_TARGET_POSITION = new Vector3(0f, 260f, 0f);
+		public static readonly Vector3 HIGH_SCORE_TEXT_TARGET_POSITION = new Vector3(-150f, 260f, 0f);
+
+		/**
+		 * ハイスコアオブジェクトの初期位置(移動前の位置)
+		 * @type {Vector3}
+		 */
+		public static readonly Vector3 CURRENT_SCORE_TEXT_INITIAL_POSITION = new Vector3(650f, 26.0f, 0f);
+
+		/**
+		 * ハイスコアオブジェクトの移動後の位置
+		 * @type {Vector3}
+		 */
+		public static readonly Vector3 CURRENT_SCORE_TEXT_TARGET_POSITION = new Vector3(165f, 26.0f, 0f);
 
 		/**
 		 * 戻るボタンの初期位置(移動前の位置)
@@ -65,5 +83,16 @@ namespace Common {
 		 * @type {Vector3}
 		 */
 		public static readonly Vector3 RESTART_BUTTON_TARGET_POSITION = new Vector3(0f, -300f, 0f);
+
+		/**
+		 * BGMの音量のキー
+		 * @type {String}
+		 */
+		public const string BGM_VOLUME_KEY = "BGM_VOLUME_KEY";
+		/**
+		 * SEの音量のキー
+		 * @type {String}
+		 */
+		public const string SE_VOLUME_KEY  = "SE_VOLUME_KEY";
 	}
 }

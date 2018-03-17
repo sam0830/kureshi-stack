@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Common;
 
 public class SaveConfigButton : MonoBehaviour {
 
@@ -27,10 +28,11 @@ public class SaveConfigButton : MonoBehaviour {
 	}
 
 	public void OnClick() {
-		// TODO: PlayerPrefsに各パラメータの値を保存
-		// AudioManager.Instance.ChangeVolume();
 		Debug.Log("BGMの音量"+bgmSlider.value+"を保存");
 		Debug.Log("SEの音量"+seSlider.value+"を保存");
+		PlayerPrefs.SetFloat(Constant.BGM_VOLUME_KEY, bgmSlider.value);
+		PlayerPrefs.SetFloat(Constant.SE_VOLUME_KEY, seSlider.value);
+		AudioManager.Instance.ChangeVolume(bgmSlider.value, seSlider.value);
 		AudioManager.Instance.PlayBGM(TITLE_BGM);
 		configModalWindow.enabled = false;
 	}

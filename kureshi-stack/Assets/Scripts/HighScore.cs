@@ -12,7 +12,7 @@ public class HighScore : MonoBehaviour {
 
 	private void Start() {
 		highScoreText = transform.Find("Text").gameObject.GetComponent<Text>();
-		highScoreText.text = Constant.PREFIX_STRING + ((int)SequenceManager.Instance.GetHighScore()).ToString();
+		highScoreText.text = Constant.HIGH_SCORE_PREFIX_STRING + ((int)SequenceManager.Instance.CurrentHighScore).ToString();
 		rectTransform = GetComponent<RectTransform>();
 		rectTransform.localPosition = Constant.HIGH_SCORE_TEXT_INITIAL_POSITION;
 	}
@@ -22,7 +22,6 @@ public class HighScore : MonoBehaviour {
 			rectTransform.localPosition,
 			Constant.HIGH_SCORE_TEXT_TARGET_POSITION,
 			300f*Time.deltaTime);
-
 	}
 
 }
