@@ -5,10 +5,18 @@ using Common;
 
 public class CameraMove : MonoBehaviour {
 
-	private void OnTriggerStay2D(Collider2D coll) {
-		if(coll.gameObject.tag == Constant.STACKED_TAG_NAME) {
-			SequenceManager.Instance.IsExistKureshi = true;
-			return;
+	private void Update() {
+		RaycastHit2D hit = Physics2D.Raycast(
+		new Vector3(-3.5f, this.transform.position.y -1, 0),
+		new Vector3(3.5f, this.transform.position.y -1, 0),
+		7.0f);
+		if(hit.collider) {
+			if(hit.collider.tag == Constant.STACKED_TAG_NAME) {
+				SequenceManager.Instance.IsExistKureshi = true;
+				return;
+			}
 		}
+		SequenceManager.Instance.IsExistKureshi = false;
+		return;
 	}
 }
