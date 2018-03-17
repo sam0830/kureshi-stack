@@ -90,8 +90,8 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	 private List<GameObject> _kureshiList;
 
 	 private Vector3 cameraTargetPos = new Vector3(0f, 0f, 0f);
-	 private Vector3 kureshiTargetPos = Constant.WAIT_POSITION;
-	 private Vector3 kureshiInitialPos = Constant.INITIAL_POSITION;
+	 private Vector3 kureshiTargetPos = Constant.KURESHI_WAIT_POSITION;
+	 private Vector3 kureshiInitialPos = Constant.KURESHI_INITIAL_POSITION;
 
 	public float UserTime {
 		get { return _userTime; }
@@ -114,13 +114,13 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 
 	private void Start() {
 		if(gameoverCanvas == null) {
-			gameoverCanvas = GameObject.Find("GameOverView").GetComponent<Canvas>();
+			// TODO: Resources.OnLoad
 		}
 		if(mainCamera == null) {
 			mainCamera = GameObject.Find("Main Camera");
 		}
-		gameoverCanvas.enabled = false;
-		Time.timeScale = 1.0f; // 前回ゲームオーバーの場合時間が止まっている
+		//Time.timeScale = 1.0f; // 前回ゲームオーバーの場合時間が止まっている
+		gameoverCanvas.GetComponent<Canvas>().worldCamera = mainCamera.GetComponent<Camera>();
 	}
 
 	private void Update() {
@@ -240,8 +240,8 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 		 * ゲームを一時停止する
 		 * ゲームオーバービューを表示
 		 */
-		Time.timeScale = 0;
-		gameoverCanvas.enabled = true;
+		// Time.timeScale = 0;
+		Instantiate(gameoverCanvas);
 		_ePhaseType = PhaseType.GAMEOVER;
 	}
 
