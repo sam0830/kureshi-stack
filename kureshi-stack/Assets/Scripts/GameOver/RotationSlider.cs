@@ -4,13 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class RotationSlider : MonoBehaviour {
-	private Slider _slider;
+	private Slider slider;
 
 	private void Start() {
-		_slider = GetComponent<Slider>();
+		slider = GetComponent<Slider>();
 	}
 
 	public void OnValueChanged() {
-		SequenceManager.Instance.RoatateModel(_slider.value);
+		SequenceManager.Instance.RotateModel(slider.value);
 	}
 }

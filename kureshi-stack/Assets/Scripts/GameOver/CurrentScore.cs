@@ -5,6 +5,18 @@ using UnityEngine.UI;
 using Common;
 
 public class CurrentScore : MonoBehaviour {
+	/**
+	 * ハイスコアオブジェクトの初期位置(移動前の位置)
+	 * @type {Vector3}
+	 */
+	public static readonly Vector3 CURRENT_SCORE_TEXT_INITIAL_POSITION = new Vector3(650f, 26.0f, 0f);
+
+	/**
+	 * ハイスコアオブジェクトの移動後の位置
+	 * @type {Vector3}
+	 */
+	public static readonly Vector3 CURRENT_SCORE_TEXT_TARGET_POSITION = new Vector3(165f, 26.0f, 0f);
+
 	[SerializeField]
 	private Text currentScoreText;
 
@@ -18,18 +30,18 @@ public class CurrentScore : MonoBehaviour {
 
 	private void Start() {
 		currentScoreText = transform.Find("Text").gameObject.GetComponent<Text>();
-		currentScoreText.text = Constant.CURRENT_SCORE_PREFIX_STRING + ((int)SequenceManager.Instance.Score).ToString();
+		currentScoreText.text = UIString.CURRENT_SCORE_PREFIX_STRING + ((int)SequenceManager.Instance.Score).ToString();
 		rectTransform = GetComponent<RectTransform>();
-		rectTransform.localPosition = Constant.CURRENT_SCORE_TEXT_INITIAL_POSITION;
+		rectTransform.localPosition = CURRENT_SCORE_TEXT_INITIAL_POSITION;
 		if(SequenceManager.Instance.IsHighScoreUpdated) {
 			acc = vel = Vector3.zero;
-			pos = Constant.CURRENT_SCORE_TEXT_INITIAL_POSITION;
+			pos = CURRENT_SCORE_TEXT_INITIAL_POSITION;
 		}
 	}
 
 	private void Update() {
 		if(SequenceManager.Instance.IsHighScoreUpdated) {
-			Vector3 diff = Constant.CURRENT_SCORE_TEXT_TARGET_POSITION - this.pos;
+			Vector3 diff = CURRENT_SCORE_TEXT_TARGET_POSITION - this.pos;
 	        this.acc = diff * 0.1f;
 	        this.vel += this.acc;
 	        this.vel *= 0.9f;
@@ -39,7 +51,7 @@ public class CurrentScore : MonoBehaviour {
 		}
 		rectTransform.localPosition = Vector3.MoveTowards(
 			rectTransform.localPosition,
-			Constant.CURRENT_SCORE_TEXT_TARGET_POSITION,
+			CURRENT_SCORE_TEXT_TARGET_POSITION,
 			300f*Time.deltaTime);
 	}
 

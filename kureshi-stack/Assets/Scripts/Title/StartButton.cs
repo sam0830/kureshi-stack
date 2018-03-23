@@ -2,14 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TouchScript.Gestures;
+using Common;
 
 public class StartButton : MonoBehaviour {
 
-	private const string Start_SE = "StartSE";
-
+	public void OnClick() {
+		AudioManager.Instance.PlaySE(Constant.Start_SE);
+	   	GameSceneManager.Instance.LoadGameScene();
+	}
+	/*
 	private void OnEnable() {
 	    // TapGestureのdelegateに登録
-	    GetComponent<TapGesture>().Tapped += tappedHandle;
+	    GetComponent<TapGesture>().Tapped += TappedHandle;
 	}
 
 	private void OnDisable() {
@@ -22,12 +26,13 @@ public class StartButton : MonoBehaviour {
 
 	private void UnsubscribeEvent() {
 	    // 登録を解除
-	    GetComponent<TapGesture>().Tapped -= tappedHandle;
+	    GetComponent<TapGesture>().Tapped -= TappedHandle;
 	}
 
-	private void tappedHandle(object sender, System.EventArgs e) {
+	private void TappedHandle(object sender, System.EventArgs e) {
 	    //処理したい内容
-	    AudioManager.Instance.PlaySE(Start_SE);
+	    AudioManager.Instance.PlaySE(Constant.Start_SE);
 	   	GameSceneManager.Instance.LoadGameScene();
 	}
+	*/
 }

@@ -1,13 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Common;
 
 public class HowToButton : MonoBehaviour {
 
-	private const string ICON_SE = "IconSE";
-
 	public void OnClick() {
-		AudioManager.Instance.PlaySE(ICON_SE);
+		AudioManager.Instance.PlaySE(Constant.ICON_SE);
 		GameSceneManager.Instance.LoadHowToScene();
 	}
 }
