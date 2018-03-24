@@ -79,12 +79,6 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	private const float WAIT_TIME = 3.0f;
 
 	/**
-	 * カメラ位置に既にオブジェクトがあるかどうか
-	 * @type {bool}
-	 */
-	private bool _isExistKureshi = false;
-
-	/**
 	 * 現在のスコア保存
 	 * @type {int}
 	 */
@@ -123,11 +117,6 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	public int Score {
 		get { return _score; }
 		set { _score = value; }
-	}
-
-	public bool IsExistKureshi {
-		get { return _isExistKureshi; }
-		set { _isExistKureshi = value; }
 	}
 
 	public PhaseType ePhaseType {
@@ -189,7 +178,18 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	 */
 	private void InitialProcess() {
 		// 呉氏が十分積まれているとき
-		if(_isExistKureshi){
+		bool isExistKureshi = false;
+		RaycastHit2D[] hits = Physics2D.RaycastAll(
+		new Vector3(-3.5f, mainCamera.transform.position.y -1, 0),
+		new Vector3(3.5f, mainCamera.transform.position.y -1, 0),
+		7.0f);
+		foreach(RaycastHit2D hit in hits) {
+			if(hit.collider.tag == Constant.STACKED_TAG_NAME) {
+				isExistKureshi = true;
+				break;
+			}
+		}
+		if(isExistKureshi){
 			cameraTargetPos = mainCamera.transform.position + CAMERA_MOVE_HEIGHT;
 			kureshiTargetPos = kureshiTargetPos + Vector3.up;
 			kureshiInitialPos = kureshiInitialPos + Vector3.up;
@@ -226,6 +226,7 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 			userTime = USER_TIME;
 			popupObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
 			popupObject.GetComponent<ObjectHandler>().UnregisterGesture();
+			popupObject.GetComponent<ObjectHandler>().IsSelected = false;
 			popupObject.GetComponent<PolygonCollider2D>().isTrigger = false;
 			_ePhaseType = PhaseType.WAIT;
 		}
@@ -247,7 +248,6 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	private void EndProcess() {
 		_score++;
 		popupObject.tag = Constant.STACKED_TAG_NAME;
-		_isExistKureshi = false;
 		_ePhaseType = PhaseType.INITIAL;
 	}
 
@@ -275,7 +275,7 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 		if(_ePhaseType != PhaseType.USER) {
 			return;
 		}
-		popupObject.transform.rotation = Quaternion.Euler(0, 0, angle);
+		popupObject.transform.rotation = Quaternion.Euler(0, 0, -angle);
 	}
 
 }

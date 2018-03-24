@@ -19,6 +19,11 @@ namespace Common {
 		public const string HIGH_SCORE_KEY = "high_score";
 
 		/**
+		 * タイトルBGMのキー
+		 * @type {string}
+		 */
+		public const string TITLE_BGM = "TitleBGM";
+		/**
 		 * SEのキー
 		 * @type {string}
 		 */

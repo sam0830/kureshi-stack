@@ -7,7 +7,12 @@ public class ObjectHandler : MonoBehaviour , InputGesture {
 	private Vector3 CENTER_OF_GRAVITY = new Vector3(0f,0f,0f);
 	private Rigidbody2D rigidboy2D;
 
-	private bool isSelected = false;
+	private bool _isSelected = false;
+
+	public bool IsSelected {
+		get { return _isSelected; }
+		set { _isSelected = value; }
+	}
 	/// <summary>
     ///
     /// </summary>
@@ -47,6 +52,9 @@ public class ObjectHandler : MonoBehaviour , InputGesture {
     /// <returns>処理する必要があるならtrueを返す</returns>
     /// <param name="info">Info.</param>
     public bool IsGestureProcess( GestureInfo info ) {
+		if(GameSceneManager.Instance.ePlayType == GameSceneManager.PlayType.PAUSE) {
+			return false;
+		}
         return true;  // 常に処理する(仮)
     }
 
@@ -55,18 +63,21 @@ public class ObjectHandler : MonoBehaviour , InputGesture {
     /// </summary>
     /// <param name="info">Info.</param>
     public void OnGestureDown( GestureInfo info ) {
+		if(GameSceneManager.Instance.ePlayType == GameSceneManager.PlayType.PAUSE) {
+			_isSelected = false;
+			return;
+		}
 		Ray ray = Camera.main.ScreenPointToRay(info.ScreenPosition);
-		Debug.Log(info.ScreenPosition);
         // Rayの当たったオブジェクトの情報を格納する
         RaycastHit2D hit = Physics2D.Raycast((Vector2)ray.origin, (Vector2)ray.direction, 100f);
         // オブジェクトにrayが当たった時
         if(hit.collider) {
 			if(hit.collider.gameObject == this.gameObject) {
-				isSelected = true;
+				_isSelected = true;
 				return;
 			}
 		}
-		isSelected = false;
+		_isSelected = false;
     }
 
     /// <summary>
@@ -74,7 +85,11 @@ public class ObjectHandler : MonoBehaviour , InputGesture {
     /// </summary>
     /// <param name="info">Info.</param>
     public void OnGestureUp( GestureInfo info ) {
-		isSelected = false;
+		if(GameSceneManager.Instance.ePlayType == GameSceneManager.PlayType.PAUSE) {
+			_isSelected = false;
+			return;
+		}
+		_isSelected = false;
     }
 
     /// <summary>
@@ -82,7 +97,11 @@ public class ObjectHandler : MonoBehaviour , InputGesture {
     /// </summary>
     /// <param name="info">Info.</param>
     public void OnGestureDrag( GestureInfo info ) {
-		if(!isSelected) {
+		if(GameSceneManager.Instance.ePlayType == GameSceneManager.PlayType.PAUSE) {
+			_isSelected = false;
+			return;
+		}
+		if(!_isSelected) {
 			return;
 		}
 		Vector3 pos = this.transform.position;
@@ -95,7 +114,7 @@ public class ObjectHandler : MonoBehaviour , InputGesture {
     /// </summary>
     /// <param name="info">Info.</param>
     public void OnGestureFlick( GestureInfo info ) {
-
+		Debug.Log("フリック");
     }
 
 }
