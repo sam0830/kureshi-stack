@@ -507,8 +507,8 @@ PlayerSettings:
   webGLUseWasm: 0
   webGLCompressionFormat: 1
   scriptingDefineSymbols:
-    1: TOUCHSCRIPT_DEBUG
-    7: TOUCHSCRIPT_DEBUG
+    1: 8
+    7: 8
   platformArchitecture: {}
   scriptingBackend:
     Android: 1
