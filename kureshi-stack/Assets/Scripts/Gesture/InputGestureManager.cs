@@ -342,6 +342,7 @@ public class InputGestureManager : SingletonMonoBehaviour<InputGestureManager>
     return positions[eindex] - positions[sindex];
   }
 
+#if UNITY_EDITOR
   /// <summary>
   /// デバッグ表示
   /// </summary>
@@ -366,4 +367,5 @@ public class InputGestureManager : SingletonMonoBehaviour<InputGestureManager>
     y += 20;
     GUI.Label( new Rect(x,y,300,20), "ProcessingGesture = " + (this.ProcessingGesture == null ? "null" : "live")  );
   }
+#endif
 }

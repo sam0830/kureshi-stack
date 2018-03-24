@@ -28,6 +28,13 @@ public class AdsManager : SingletonMonoBehaviour<AdsManager> {
 		}
 	}
 
+	public void ShowVideo() {
+		if(Advertisement.IsReady("video")) {
+			var options = new ShowOptions { resultCallback = HandleShowResult };
+			Advertisement.Show("video", options);
+		}
+	}
+
 	private void HandleShowResult(ShowResult result) {
 		switch (result) {
 			case ShowResult.Finished:

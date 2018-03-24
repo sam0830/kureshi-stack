@@ -172,7 +172,7 @@ MonoBehaviour:
   _ePhaseType: 0
   gameoverCanvas: {fileID: 223051000932895114, guid: fc0f96dcd411c5e4fa44b8693fe41e57,
     type: 2}
-  mainCamera: {fileID: 0}
+  mainCamera: {fileID: 395592500}
   _kureshiList:
   - {fileID: 1650304282232824, guid: c4011bf52457f87438c74190d4edf1a1, type: 2}
   - {fileID: 1010815254054570, guid: ccf3f8f75c338994687ec75cbafb0701, type: 2}
@@ -180,6 +180,8 @@ MonoBehaviour:
   - {fileID: 1761709055854172, guid: 0ae4411ae4f24444fa4246bd4d39a2b4, type: 2}
   - {fileID: 1193384910959118, guid: 091b462f4cc5c3044a3f723b7951e5c3, type: 2}
   - {fileID: 1438793575650982, guid: d57d456a43e755048b2dd785138277bd, type: 2}
+  - {fileID: 1295608490785594, guid: 614464b92eb8eef4b8e9ca27c1d8eb11, type: 2}
+  - {fileID: 1146317845499322, guid: 7289fa9292624c940a1c9951380d5885, type: 2}
 --- !u!4 &61541828
 Transform:
   m_ObjectHideFlags: 0
