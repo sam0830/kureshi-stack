@@ -105,8 +105,15 @@ public class ObjectHandler : MonoBehaviour , InputGesture {
 			return;
 		}
 		Vector3 pos = this.transform.position;
-		float x = Camera.main.ScreenToWorldPoint(info.ScreenPosition).x;
-		this.transform.position = new Vector3(x, pos.y, pos.z);
+		Vector3 diff = Camera.main.ScreenToWorldPoint (new Vector3(0,0,1.0f)) - Camera.main.ScreenToWorldPoint(info.DeltaPosition);
+		this.transform.position = new Vector3(pos.x-diff.x, pos.y, pos.z);
+		float min = Camera.main.ScreenToWorldPoint(new Vector3(0,0,0)).x;
+		float max = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width,0,0)).x;
+		this.transform.position = new Vector3(
+			Mathf.Clamp(this.transform.position.x, min, max),
+			pos.y,
+			pos.z
+		);
     }
 
     /// <summary>

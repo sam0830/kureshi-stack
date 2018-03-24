@@ -61,12 +61,8 @@ public class InputGestureManager : SingletonMonoBehaviour<InputGestureManager>
   /// <summary>
   /// Awake
   /// </summary>
-  void Awake (){
-      if (this != Instance) {
-          Destroy (this);
-          return;
-      }
-
+  override protected void Awake (){
+      base.Awake();
       DontDestroyOnLoad (this.gameObject);
   }
 

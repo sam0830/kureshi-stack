@@ -35,12 +35,8 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
 	//初期化
 	//=================================================================================
 
-	private void Awake ()
-	{
-		if (this != Instance) {
-			Destroy (this);
-			return;
-		}
+	override protected void Awake () {
+		base.Awake();
 
 		DontDestroyOnLoad (this.gameObject);
 

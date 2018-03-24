@@ -6,7 +6,7 @@ public class CancelButton : MonoBehaviour {
 
 	public void OnClick() {
 		// Canvas.enabled = false;
-		GameSceneManager.Instance.SetConfirmDialogEnabled();
+		ConfirmDialog.Instance.SetConfirmDialogEnabled();
 		Time.timeScale = 1.0f;
 		GameSceneManager.Instance.ePlayType = GameSceneManager.PlayType.PLAY;
 	}
