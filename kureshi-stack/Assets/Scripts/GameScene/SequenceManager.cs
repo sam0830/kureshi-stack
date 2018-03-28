@@ -170,6 +170,8 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 			default:
 				break;
 		}
+		Debug.DrawLine(new Vector3(-3.5f, mainCamera.transform.position.y-1, 0f),
+		new Vector3(3.5f, mainCamera.transform.position.y-1, 0f),Color.red);
 	}
 
 	/**
@@ -179,17 +181,17 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	private void InitialProcess() {
 		// 呉氏が十分積まれているとき
 		bool isExistKureshi = false;
-		RaycastHit2D[] hits = Physics2D.RaycastAll(
-		new Vector3(-3.5f, mainCamera.transform.position.y -1, 0),
-		new Vector3(3.5f, mainCamera.transform.position.y -1, 0),
-		7.0f);
+		RaycastHit2D[] hits = Physics2D.LinecastAll(
+			new Vector3(-3.5f, mainCamera.transform.position.y-1, 0f),
+			new Vector3(3.5f, mainCamera.transform.position.y-1, 0f)
+		);
 		foreach(RaycastHit2D hit in hits) {
 			if(hit.collider.tag == Constant.STACKED_TAG_NAME) {
 				isExistKureshi = true;
 				break;
 			}
 		}
-		if(isExistKureshi){
+		if(isExistKureshi) {
 			cameraTargetPos = mainCamera.transform.position + CAMERA_MOVE_HEIGHT;
 			kureshiTargetPos = kureshiTargetPos + Vector3.up;
 			kureshiInitialPos = kureshiInitialPos + Vector3.up;
@@ -197,6 +199,7 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 		popupObject = Instantiate(_kureshiList[Random.Range(0, _kureshiList.Count)],
 		kureshiInitialPos,
 		Quaternion.Euler(0, 0, 0));
+		RotationSlider.Instance.SliderValue = 0;
 		_ePhaseType = PhaseType.CAMERAMOVE;
 	}
 
@@ -222,6 +225,7 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	private void UserProcess() {
 		// 操作可能時間中はx軸のみのドラッグが可能
 		userTime -= Time.deltaTime;
+		popupObject.transform.rotation = Quaternion.Euler(0, 0, -RotationSlider.Instance.SliderValue);
 		if(userTime <= 0) {
 			userTime = USER_TIME;
 			popupObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
@@ -269,13 +273,6 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 		// Time.timeScale = 0;
 		Instantiate(gameoverCanvas);
 		_ePhaseType = PhaseType.GAMEOVER;
-	}
-
-	public void RotateModel(float angle) {
-		if(_ePhaseType != PhaseType.USER) {
-			return;
-		}
-		popupObject.transform.rotation = Quaternion.Euler(0, 0, -angle);
 	}
 
 }

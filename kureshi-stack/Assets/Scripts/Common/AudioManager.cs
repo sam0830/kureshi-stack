@@ -5,8 +5,7 @@ using System.Collections.Generic;
 /// <summary>
 /// BGMとSEの管理をするマネージャ。シングルトン。
 /// </summary>
-public class AudioManager : SingletonMonoBehaviour<AudioManager>
-{
+public class AudioManager : SingletonMonoBehaviour<AudioManager> {
 	//ボリューム保存用のkeyとデフォルト値
 	private const string BGM_VOLUME_KEY = "BGM_VOLUME_KEY";
 	private const string SE_VOLUME_KEY  = "SE_VOLUME_KEY";

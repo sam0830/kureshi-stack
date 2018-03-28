@@ -6,8 +6,8 @@ using UnityEngine.Advertisements;
 
 public class AdsManager : SingletonMonoBehaviour<AdsManager> {
 
-	[SerializeField] private const string ANDROID_GAME_ID = "1745755";
-	[SerializeField] private const string IOS_GAME_ID = "";
+	private const string ANDROID_GAME_ID = "1745755";
+	private const string IOS_GAME_ID = "";
 
 	override protected void Awake() {
 		base.Awake();
