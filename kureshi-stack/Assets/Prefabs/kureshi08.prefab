@@ -157,7 +157,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bbb2c3a40b6bec488f1a64331b6f0d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CENTER_OF_GRAVITY: {x: -0.31, y: -0.43, z: 0}
+  CENTER_OF_GRAVITY: {x: -0.2, y: -0.43, z: 0}
 --- !u!212 &212359887118691800
 SpriteRenderer:
   m_ObjectHideFlags: 1

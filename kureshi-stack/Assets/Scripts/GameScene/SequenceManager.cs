@@ -57,7 +57,7 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	 * 経過時間
 	 * @type {float}
 	 */
-	private float userTime = USER_TIME;
+	private float _userTime = USER_TIME;
 
 	/**
 	 * 待ち時間
@@ -110,8 +110,8 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	private Vector3 kureshiInitialPos = KURESHI_INITIAL_POSITION;
 
 	public float UserTime {
-		get { return userTime; }
-		set { userTime = value; }
+		get { return _userTime; }
+		set { _userTime = value; }
 	}
 
 	public int Score {
@@ -224,10 +224,10 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 
 	private void UserProcess() {
 		// 操作可能時間中はx軸のみのドラッグが可能
-		userTime -= Time.deltaTime;
+		_userTime -= Time.deltaTime;
 		popupObject.transform.rotation = Quaternion.Euler(0, 0, -RotationSlider.Instance.SliderValue);
-		if(userTime <= 0) {
-			userTime = USER_TIME;
+		if(_userTime <= 0) {
+			_userTime = USER_TIME;
 			popupObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
 			popupObject.GetComponent<ObjectHandler>().UnregisterGesture();
 			popupObject.GetComponent<ObjectHandler>().IsSelected = false;
