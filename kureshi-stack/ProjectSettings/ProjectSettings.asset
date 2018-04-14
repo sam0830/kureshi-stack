@@ -143,7 +143,7 @@ PlayerSettings:
   applicationIdentifier:
     Android: com.Takahiro.KureshiStack
   buildNumber: {}
-  AndroidBundleVersionCode: 2
+  AndroidBundleVersionCode: 4
   AndroidMinSdkVersion: 16
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1
@@ -232,7 +232,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: fd22b94951930b947979c5af2980ab3f, type: 3}
+      m_Icon: {fileID: 2800000, guid: 2f131b0700b04c6428df9a3ea0011ff6, type: 3}
       m_Width: 128
       m_Height: 128
   m_BuildTargetBatching: []

@@ -180,22 +180,12 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	 */
 	private void InitialProcess() {
 		// 呉氏が十分積まれているとき
-		bool isExistKureshi = false;
-		RaycastHit2D[] hits = Physics2D.LinecastAll(
-			new Vector3(-3.5f, mainCamera.transform.position.y-1, 0f),
-			new Vector3(3.5f, mainCamera.transform.position.y-1, 0f)
-		);
-		foreach(RaycastHit2D hit in hits) {
-			if(hit.collider.tag == Constant.STACKED_TAG_NAME) {
-				isExistKureshi = true;
-				break;
-			}
-		}
-		if(isExistKureshi) {
+		if(IsFullyStacked()) {
 			cameraTargetPos = mainCamera.transform.position + CAMERA_MOVE_HEIGHT;
 			kureshiTargetPos = kureshiTargetPos + Vector3.up;
 			kureshiInitialPos = kureshiInitialPos + Vector3.up;
 		}
+
 		popupObject = Instantiate(_kureshiList[Random.Range(0, _kureshiList.Count)],
 		kureshiInitialPos,
 		Quaternion.Euler(0, 0, 0));
@@ -209,6 +199,9 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	 private void CameraMoveProcess() {
  		mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, cameraTargetPos, Time.deltaTime);
  		if(mainCamera.transform.position == cameraTargetPos) {
+			if(IsFullyStacked()) {
+				_ePhaseType = PhaseType.INITIAL;
+			}
  			_ePhaseType = PhaseType.SETPOSITION;
  		}
  	}
@@ -273,6 +266,20 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 		// Time.timeScale = 0;
 		Instantiate(gameoverCanvas);
 		_ePhaseType = PhaseType.GAMEOVER;
+	}
+
+	private bool IsFullyStacked() {
+		RaycastHit2D[] hits = Physics2D.LinecastAll(
+			new Vector3(-3.5f, mainCamera.transform.position.y-1, 0f),
+			new Vector3(3.5f, mainCamera.transform.position.y-1, 0f)
+		);
+		foreach(RaycastHit2D hit in hits) {
+			if(hit.collider.tag == Constant.STACKED_TAG_NAME) {
+				return true;
+				break;
+			}
+		}
+		return false;
 	}
 
 }
