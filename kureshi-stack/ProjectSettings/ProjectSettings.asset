@@ -143,7 +143,7 @@ PlayerSettings:
   applicationIdentifier:
     Android: com.Takahiro.KureshiStack
   buildNumber: {}
-  AndroidBundleVersionCode: 4
+  AndroidBundleVersionCode: 5
   AndroidMinSdkVersion: 16
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1
@@ -217,7 +217,7 @@ PlayerSettings:
   AndroidTargetDevice: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: C:/Users/ctaka/Desktop/kureshi-stack-resource/Build/user.keystore
+  AndroidKeystoreName: C:/Users/ctaka/Desktop/work/kureshi-stack/kureshi-stack-resource/BuildData/user.keystore
   AndroidKeyaliasName: kureshistack
   AndroidTVCompatibility: 1
   AndroidIsGame: 1
@@ -232,7 +232,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 2f131b0700b04c6428df9a3ea0011ff6, type: 3}
+      m_Icon: {fileID: 2800000, guid: d1f3e1991d95a214996abbdbdb939a66, type: 3}
       m_Width: 128
       m_Height: 128
   m_BuildTargetBatching: []
