@@ -33,7 +33,7 @@ public class RestartButton : MonoBehaviour {
 		Debug.Log("ボタンを押した");
 		AudioManager.Instance.PlaySE(Constant.ICON_SE);
 		//AdsManager.Instance.ShowRewardedAd();
-		AdsManager.Instance.ShowVideo();
+		//AdsManager.Instance.ShowVideo();
 		GameSceneManager.Instance.LoadTitleScene();
 	}
 }

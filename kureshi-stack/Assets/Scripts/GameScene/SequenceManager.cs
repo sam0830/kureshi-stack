@@ -276,7 +276,6 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 		foreach(RaycastHit2D hit in hits) {
 			if(hit.collider.tag == Constant.STACKED_TAG_NAME) {
 				return true;
-				break;
 			}
 		}
 		return false;
