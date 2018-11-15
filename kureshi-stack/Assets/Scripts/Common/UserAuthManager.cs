@@ -39,6 +39,21 @@ public class UserAuthManager : SingletonMonoBehaviour<UserAuthManager> {
 		user.UserName = id;
 	    user.Password = pw;
 		user.SignUpAsync((NCMBException e) => {
+			if(e!= null) {
+				if(e.ErrorMessage == "userName is duplication.") {
+					PlatformDialog.SetButtonLabel("OK");
+					PlatformDialog.Show(
+						"エラー",
+						"既にIDが登録されています",
+						PlatformDialog.Type.SubmitOnly,
+						() => {
+							Debug.Log("OK");
+						},
+						null
+					);
+				}
+				return;
+			}
 			_currentUserId = id;
 			PlayerPrefs.SetString(Constant.USER_ID_KEY, id);
 			PlayerPrefs.SetString(Constant.USER_PASS_KEY, pw);

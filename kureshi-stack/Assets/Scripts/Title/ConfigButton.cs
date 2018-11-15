@@ -12,7 +12,7 @@ public class ConfigButton : MonoBehaviour {
 	private Slider bgmSlider;
 	[SerializeField]
 	private Slider seSlider;
-	
+
 	private void Start() {
 		if(bgmSlider == null) {
 			bgmSlider = GameObject.Find("ConfigModalWindow/BGMSlider").GetComponent<Slider>();
@@ -35,6 +35,7 @@ public class ConfigButton : MonoBehaviour {
 	}
 
 	public void OnClick() {
+		TitleViewManager.Instance.DisableButtons();
 		AudioManager.Instance.PlaySE(Constant.ICON_SE);
 		AudioManager.Instance.FadeOutBGM();
 		ShowConfigModalWindow();

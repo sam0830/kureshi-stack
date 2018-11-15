@@ -25,7 +25,16 @@ public class LoginButton : MonoBehaviour {
 		AudioManager.Instance.PlaySE(Constant.ICON_SE);
 		// すでにログイン済み
 		if(UserAuthManager.Instance.GetCurrentUserId() != "" && UserAuthManager.Instance.GetCurrentUserId() != null) {
-			// 確認ダイアログを出す
+			PlatformDialog.SetButtonLabel("OK");
+			PlatformDialog.Show(
+				"ログイン",
+				"既にログイン済みです", 
+				PlatformDialog.Type.SubmitOnly,
+				() => {
+					Debug.Log("OK");
+				},
+				null
+			);
 			return;
 		}
 	}

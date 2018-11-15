@@ -14,6 +14,7 @@ public class ReturnButton : MonoBehaviour {
 	}
 
 	public void OnClick() {
+		TitleViewManager.Instance.EnableButtons();
 		AudioManager.Instance.PlayBGM(Constant.TITLE_BGM);
 		configModalWindow.enabled = false;
 	}

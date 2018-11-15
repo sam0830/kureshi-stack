@@ -49,11 +49,17 @@ public class RankScrollView : MonoBehaviour {
     if( highScoreRanking.topRankers != null && !isLeaderBoardFetched){
 
       	// 取得したトップ100ランキングを表示
+		int currentRank = 1;
+		int currentScore = highScoreRanking.topRankers[0].Score;
 		for(int i=0;i<highScoreRanking.topRankers.Count;i++) {
 			GameObject panel = (GameObject)Instantiate(rankPanel);
-			panel.transform.Find("RankLabel").GetComponent<Text>().text = (i+1)+"位";
+			if(highScoreRanking.topRankers[i].Score != currentScore) {
+				currentRank = i+1;
+			}
+			panel.transform.Find("RankLabel").GetComponent<Text>().text = currentRank+"位";
 			panel.transform.Find("UserIdLabel").GetComponent<Text>().text = highScoreRanking.topRankers[i].Name;
-			panel.transform.Find("ScoreLabel").GetComponent<Text>().text = highScoreRanking.topRankers[i].Score.ToString();
+			currentScore = highScoreRanking.topRankers[i].Score;
+			panel.transform.Find("ScoreLabel").GetComponent<Text>().text = currentScore.ToString();
 			panel.transform.SetParent(content, false);
 		}
       	isLeaderBoardFetched = true;

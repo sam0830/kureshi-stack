@@ -31,10 +31,16 @@ public class SignUpButton : MonoBehaviour {
 	}
 
 	public void OnClick() {
-		AudioManager.Instance.PlayBGM(Constant.TITLE_BGM);
+		AudioManager.Instance.PlaySE(Constant.ICON_SE);
+		if(idInputField.text == "" || passInputField.text == "") {
+			return;
+		}
+		// idとpassが入力されている
 		UserAuthManager.Instance.SignUp(idInputField.text, passInputField.text, ()=>{
 			TitleViewManager.Instance.SetUserIdLabel(idInputField.text);
+			signUpModalWindow.enabled = false;
+			TitleViewManager.Instance.EnableButtons();
 			});
-		signUpModalWindow.enabled = false;
+
 	}
 }

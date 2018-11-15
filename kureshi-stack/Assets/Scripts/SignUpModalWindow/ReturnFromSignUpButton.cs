@@ -17,5 +17,6 @@ public class ReturnFromSignUpButton : MonoBehaviour {
 	public void OnClick() {
 		AudioManager.Instance.PlayBGM(Constant.TITLE_BGM);
 		signUpModalWindow.enabled = false;
+		TitleViewManager.Instance.EnableButtons();
 	}
 }

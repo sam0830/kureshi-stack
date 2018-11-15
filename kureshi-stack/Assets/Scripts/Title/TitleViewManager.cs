@@ -36,15 +36,28 @@ public class TitleViewManager : SingletonMonoBehaviour<TitleViewManager> {
 		}
 
 		//　まだ会員登録していない
-		if(PlayerPrefs.GetString(Constant.USER_ID_KEY, "") == "") {Debug.Log(signUpModalWindow );
+		if(PlayerPrefs.GetString(Constant.USER_ID_KEY, "") == "") {
 			if(signUpModalWindow != null) {
 				signUpModalWindow.enabled = true;
+				DisableButtons();
 			}
 		}
 	}
 
 	public void SetUserIdLabel(string id) {
 		userIdLabel.text = id + "さん";
+	}
+
+	public void DisableButtons() {
+		highScoreButton.GetComponent<Button>().enabled = false;
+		configButton.GetComponent<Button>().enabled = false;
+		loginButton.GetComponent<Button>().enabled = false;
+	}
+
+	public void EnableButtons() {
+		highScoreButton.GetComponent<Button>().enabled = true;
+		configButton.GetComponent<Button>().enabled = true;
+		loginButton.GetComponent<Button>().enabled = true;
 	}
 
 }
