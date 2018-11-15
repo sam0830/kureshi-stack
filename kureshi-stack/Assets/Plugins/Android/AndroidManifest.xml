@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="YOUR_PACKAGE_NAME" >
+    package="com.Takahiro.KureshiStack" >
 	<!-- Put your package name here. -->
 
 	 <uses-sdk android:minSdkVersion="14"/>
@@ -30,7 +30,7 @@
             <meta-data android:name="android.app.lib_name" android:value="unity" />
             <meta-data android:name="unityplayer.ForwardNativeEventsToDalvik" android:value="true" />
         </activity>
-            
+
 		<!---ダイアログ -->
 		<activity
   			android:name="com.nifcloud.mbaas.ncmbfcmplugin.NCMBDialogActivity"
@@ -39,7 +39,7 @@
     		android:noHistory="true"
     		android:theme="@android:style/Theme.Wallpaper.NoTitleBar">
 		</activity>
-               
+
         <service android:name="com.nifcloud.mbaas.ncmbfcmplugin.NCMBFirebaseMessagingService" android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
