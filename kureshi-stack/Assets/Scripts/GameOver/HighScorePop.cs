@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Common;
 
-public class HighScore : MonoBehaviour {
+public class HighScorePop : MonoBehaviour {
 	/**
 	 * ハイスコアオブジェクトの初期位置(移動前の位置)
 	 * @type {Vector3}
