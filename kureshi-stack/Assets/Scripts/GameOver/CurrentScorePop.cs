@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Common;
 
-public class CurrentScore : MonoBehaviour {
+public class CurrentScorePop : MonoBehaviour {
 	/**
 	 * ハイスコアオブジェクトの初期位置(移動前の位置)
 	 * @type {Vector3}
