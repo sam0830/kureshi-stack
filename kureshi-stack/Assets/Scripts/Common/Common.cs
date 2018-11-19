@@ -51,7 +51,16 @@ namespace Common {
 		 * @type {String}
 		 */
 		public const string SE_VOLUME_KEY  = "SE_VOLUME_KEY";
-
+		/**
+		 * ユーザidのキー
+		 * @type {String}
+		 */
+		public const string USER_ID_KEY = "USER_ID_KEY";
+		/**
+		 * ユーザパスワードのキー
+		 * @type {String}
+		 */
+		public const string USER_PASS_KEY = "USER_PASS_KEY";
 		/**
 		 * シーン上のカメラの名前
 		 * @type {string}

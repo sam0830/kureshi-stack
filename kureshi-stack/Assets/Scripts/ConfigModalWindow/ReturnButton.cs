@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Common;
 
 public class ReturnButton : MonoBehaviour {
-	private const string TITLE_BGM = "TitleBGM";
 	[SerializeField]
 	private Canvas configModalWindow;
 
@@ -14,7 +14,8 @@ public class ReturnButton : MonoBehaviour {
 	}
 
 	public void OnClick() {
-		AudioManager.Instance.PlayBGM(TITLE_BGM);
+		TitleViewManager.Instance.EnableButtons();
+		AudioManager.Instance.PlayBGM(Constant.TITLE_BGM);
 		configModalWindow.enabled = false;
 	}
 }
