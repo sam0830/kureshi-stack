@@ -259,6 +259,10 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 		if(_score > PlayerPrefs.GetInt (Constant.HIGH_SCORE_KEY, 0)) {
 			PlayerPrefs.SetInt(Constant.HIGH_SCORE_KEY, _score);
 			_isHighScoreUpdated = true;
+			// ログインしていればNCMBでハイスコアを登録
+			if(UserAuthManager.Instance.GetCurrentUserId()!="" || UserAuthManager.Instance.GetCurrentUserId()!=null) {
+				new NCMB.HighScore(_score ,UserAuthManager.Instance.GetCurrentUserId()).Save();
+			}
 		}
 		/**
 		 * ゲームオーバービューを表示

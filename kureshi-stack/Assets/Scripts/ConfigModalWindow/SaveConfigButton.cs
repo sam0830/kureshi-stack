@@ -28,6 +28,7 @@ public class SaveConfigButton : MonoBehaviour {
 	}
 
 	public void OnClick() {
+		TitleViewManager.Instance.EnableButtons();
 		Debug.Log("BGMの音量"+bgmSlider.value+"を保存");
 		Debug.Log("SEの音量"+seSlider.value+"を保存");
 		PlayerPrefs.SetFloat(Constant.BGM_VOLUME_KEY, bgmSlider.value);
