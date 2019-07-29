@@ -35,3 +35,4 @@ sysinfo.txt
 *.keystore
 
 android-ndk-r10e
+.vscode
