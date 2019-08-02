@@ -1,5 +1,7 @@
 fileFormatVersion: 2
-guid: 3839d8951e4ec41b298d3f01198a3f66
+guid: decb3f449619f4aeb8bbcb4ad3223ef0
+timeCreated: 1563328501
+licenseType: Free
 PluginImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -23,8 +25,7 @@ PluginImporter:
       iPhone: iOS
     second:
       enabled: 1
-      settings:
-        AddToEmbeddedBinaries: false
+      settings: {}
   userData: 
   assetBundleName: 
   assetBundleVariant: 

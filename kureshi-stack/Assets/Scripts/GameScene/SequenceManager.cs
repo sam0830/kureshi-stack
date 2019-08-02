@@ -23,6 +23,9 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 		WAIT,
 		END,
 		GAMEOVER,
+		CUT_IN_START,
+		CUT_IN,
+		CUT_IN_END
 	}
 
 	/**
@@ -98,12 +101,20 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 
 	[SerializeField]
 	private Canvas gameoverCanvas;
+	
+	[SerializeField]
+	private Canvas cutInCanvas;
 
 	[SerializeField]
 	private GameObject mainCamera;
 
 	[SerializeField]
 	private List<GameObject> _kureshiList;
+
+	[SerializeField]
+	private List<GameObject> _cutInImageList;
+
+	private GameObject cutInImage;
 
 	private Vector3 cameraTargetPos;
 	private Vector3 kureshiTargetPos = KURESHI_WAIT_POSITION;
@@ -166,6 +177,15 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 				break;
 			case PhaseType.GAMEOVER:
 				GameOverProcess();
+				break;
+			case PhaseType.CUT_IN_START:
+				CutInStartProcess();
+				break;
+			case PhaseType.CUT_IN:
+				CutInProcess();
+				break;
+			case PhaseType.CUT_IN_END:
+				CutInEndProcess();
 				break;
 			default:
 				break;
@@ -245,11 +265,71 @@ public class SequenceManager : SingletonMonoBehaviour<SequenceManager> {
 	private void EndProcess() {
 		_score++;
 		popupObject.tag = Constant.STACKED_TAG_NAME;
+		if(_score < 10) {
+			_ePhaseType = PhaseType.INITIAL;
+			return;
+		}
+		if(_score % 5 == 0) {
+			_ePhaseType = PhaseType.CUT_IN_START;
+			return;
+		}
 		_ePhaseType = PhaseType.INITIAL;
 	}
 
 	private void GameOverProcess() {
 		// ゲームオーバー画面で毎フレーム呼ばれる
+	}
+
+	private void CutInStartProcess() {
+		cutInCanvas.gameObject.SetActive(true);
+		switch(_score) {
+			case 10:
+			CreateCutInImage(0);
+			break;
+			case 15:
+			CreateCutInImage(1);
+			break;
+			case 20:
+			CreateCutInImage(2);
+			break;
+			case 25:
+			CreateCutInImage(3);
+			break;
+			case 30:
+			CreateCutInImage(4);
+			break;
+			case 35:
+			CreateCutInImage(5);
+			break;
+			case 40:
+			CreateCutInImage(6);
+			break;
+			case 45:
+			CreateCutInImage(7);
+			break;
+			case 50:
+			CreateCutInImage(8);
+			break;
+
+		}
+	}
+
+	private void CreateCutInImage(int num) {
+		cutInImage = Instantiate(_cutInImageList[num]);
+		cutInImage.transform.SetParent(cutInCanvas.transform, false);
+		cutInImage.transform.SetAsFirstSibling();
+		_ePhaseType = PhaseType.CUT_IN;
+	}
+	private void CutInProcess() {
+		if(cutInImage.GetComponent<RectTransform>().localPosition == CutInImage.CUT_IN_IMAGE_TARGET_POSITION) {
+			_ePhaseType = PhaseType.CUT_IN_END;
+		}
+		
+	}
+
+	private void CutInEndProcess() {
+		cutInCanvas.gameObject.SetActive(false);
+		_ePhaseType = PhaseType.INITIAL;
 	}
 
 	public void SetGameOver() {
