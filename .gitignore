@@ -35,4 +35,5 @@ sysinfo.txt
 *.keystore
 
 kureshi-stack-resource/android-ndk-r10e
+kureshi-stack-resource/android-ndk-r13b/
 .vscode
